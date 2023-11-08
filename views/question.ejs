@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question</title>
+  <style>
+    .option-label {
+      display: block;
+      margin-bottom: 40px;
+    }
+    #message {
+      font-size: large;
+
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <%= question.question %>
+  </h1>
+  <div>
+  <form id="question-form" action="/question" method="POST">
+    <!-- Add a hidden input to store the question ID -->
+    <input type="hidden" name="questionId" value="<%= question._id %>">
+    <label class="option-label">
+      <input type="radio" name="answer" value="A">
+      <%= question.options.A %>
+    </label>
+    <br>
+    <label class="option-label">
+      <input type="radio" name="answer" value="B">
+      <%= question.options.B %>
+    </label>
+    <br>
+    <label class="option-label">
+      <input type="radio" name="answer" value="C">
+      <%= question.options.C %>
+    </label>
+    <br>
+    <label class="option-label">
+      <input type="radio" name="answer" value="D">
+      <%= question.options.D %>
+    </label>
+    <br>
+    <button type="submit" style="width: 100px; height: 75px">Submit</button>
+  </form>
+    <!-- Add a placeholder for the message -->
+    <div id="message" ></div>
+  <form action="/question" method="GET">
+    <br></br>
+    <button type="submit" style="width: 100px; height: 75px">New Question</button>
+  </form>
+</div>
+
+
+  <script>
+    // Get references to the form and messageContainer
+    const form = document.getElementById('question-form');
+    const messageContainer = document.getElementById('message');
+
+    // Add event listener to the form
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      // Get form data
+      const formData = new FormData(event.target);
+
+      // Convert FormData to URL-encoded string
+      const queryString = formDataToQueryString(formData);
+
+      // Send form data to the server
+      const response = await fetch('/question', {
+        method: 'POST',
+        body: queryString,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+
+      // Parse the response JSON
+      const result = await response.json();
+
+      // Update the message container with the result
+      messageContainer.textContent = result.message;
+    });
+
+    // Helper function to convert FormData to URL-encoded string
+    function formDataToQueryString(formData) {
+      const params = new URLSearchParams();
+
+      for (const [key, value] of formData.entries()) {
+        params.append(key, value);
+      }
+
+      return params.toString();
+    }
+  </script>
+</body>
+
+</html>
