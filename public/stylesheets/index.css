@@ -1,0 +1,82 @@
+@font-face {
+  font-family: 'Futura';
+  font-weight: normal;
+  src: url('/fonts/FuturaStd-Book.otf');
+}
+
+@font-face {
+  font-family: 'Futura';
+  font-weight: bold;
+  src: url('/fonts/FuturaStd-Heavy.otf');
+}
+
+/* Elements */
+a {
+  color: white;
+  font-weight: bold;
+  margin-right: 20px;
+  text-decoration: none;
+}
+
+body {
+  background-color: #f5f5f5;
+  color: #333333;
+  font-family: 'Futura', sans-serif;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+footer {
+  background-color: dodgerblue;
+  bottom: 0;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+h2 {
+  text-align: center;
+}
+
+header {
+  background-color: dodgerblue;
+  color: white;
+  padding-top: 20px;
+  text-align: center;
+}
+
+nav {
+  background-color: #333333;
+  padding: 10px;
+}
+
+/* Classes and IDs */
+.cta-button {
+  background-color: dodgerblue;
+  border-radius: 5px;
+  color: white;
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+
+#button-container {
+  text-align: center;
+}
+
+#container {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 800px;
+  padding: 20px;
+}
+
+#logo {
+  border-radius: 50%;
+  width: 100px;
+}
