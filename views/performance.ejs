@@ -1,0 +1,87 @@
+<!-- performance.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance</title>
+    <link href="/stylesheets/performance.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Test Review App</h1>
+        <p>Your go-to platform for effective test preparation</p>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/question">Review</a>
+            <a href="/performance">Performance</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Performance Metrics</h2>
+        <div id="performanceContainer">
+    <div id="performanceText">
+        <p id="questionsAnsweredText">Total Questions Answered: <span id="questionsAnsweredValue"><%= performance.questionsAnswered %></span></p>
+        <p id="correctAnswersText">Correct Answers: <span id="correctAnswersValue"><%= performance.correctAnswers %></span></p>
+        <p id="incorrectAnswersText">Incorrect Answers: <span id="incorrectAnswersValue"><%= performance.incorrectAnswers %></span></p>
+    </div>
+</div>
+
+        <form action="/performance" method="post">
+            <button id="reset-button" type="submit">Reset Metrics</button>
+        </form>
+    </main>
+
+    <footer>&copy; 2023 Test Review App</footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jquery UI -->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+    <!-- Add this script to your HTML -->
+<!-- Add this script to your HTML -->
+<script>
+    
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Assuming you have a button with id="reset-button"
+        const resetButton = document.getElementById('reset-button');
+
+        resetButton.addEventListener('click', async function (event) {
+            event.preventDefault();
+
+            try {
+                // Make a POST request to reset performance metrics
+                const response = await fetch('/performance', { method: 'POST' });
+
+                // Parse the JSON response
+                const result = await response.json();
+
+                // Check if the 'performance' object exists in the result
+                const questionsAnsweredElement = document.getElementById('questionsAnsweredValue');
+                const correctAnswersElement = document.getElementById('correctAnswersValue');
+                const incorrectAnswersElement = document.getElementById('incorrectAnswersValue');
+
+                // Update the page content with the new performance metrics
+                performance.questionsAnswered = result.performance.questionsAnswered;
+                performance.correctAnswers = result.performance.correctAnswers;
+                performance.incorrectAnswers = result.performance.incorrectAnswers;
+
+                // Example of updating values
+                questionsAnsweredElement.textContent = performance.questionsAnswered;
+                correctAnswersElement.textContent = performance.correctAnswers;
+                incorrectAnswersElement.textContent = performance.incorrectAnswers;
+
+            } catch (error) {
+                console.error('Error resetting metrics:', error);
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>

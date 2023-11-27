@@ -1,10 +1,25 @@
-var express = require('express');
-var router = express.Router();
+// index.js
+const express = require('express');
+const router = express.Router();
 const mongoose = require('mongoose');
 const Question = require('../models/question');
 
+// Variables to track performance metrics in memory
+let questionsAnswered = 0;
+let correctAnswers = 0;
+let incorrectAnswers = 0;
 
-/* GET Question page. */
+// Connect to MongoDB
+mongoose.connect('mongodb+srv://user:user@final-cluster0.waszbq8.mongodb.net/?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('Connected to database!');
+}).catch((err) => {
+  console.log('Error connecting to database:', err);
+});
+
+// GET Question page
 router.get('/question', async (req, res) => {
   try {
     const count = await Question.countDocuments();
@@ -23,7 +38,6 @@ router.get('/question', async (req, res) => {
   }
 });
 
-// POST the user's answer and check if it's correct
 router.post('/question', async (req, res, next) => {
   console.log('Form submitted!');
   console.log(req.body);
@@ -33,57 +47,74 @@ router.post('/question', async (req, res, next) => {
   console.log('Question ID:', questionId);
   console.log('Answer:', answer);
 
-    // Log all question IDs
-    // const allQuestionIds = await getAllQuestionIds();
-    // console.log('All question IDs:', allQuestionIds);
-
-    console.log('Selected question ID:', questionId);
-
-
-  Question.findById(questionId)
-    .then(question => {
-      if (!question) {
-        console.log('No question found in database!');
-        res.status(404).send('No question found in database!');
-      } else {
-        console.log('Question:', question);
-
-        console.log('User answer:', answer);
-
-        const isCorrect = answer === question.answer;
-        console.log('Is answer correct?', isCorrect);
-
-        const message = isCorrect ? 'Correct!' : 'Incorrect!';
-
-        // Return the message as JSON
-        res.json({ message });
-      }
-    })
-    .catch(err => {
-      console.log('Error retrieving question:', err);
-      res.status(500).send(err);
-    });
-});
-
-//helper function to fetch all question IDs
-async function getAllQuestionIds() {
   try {
-    const allQuestions = await Question.find({}, '_id');
-    return allQuestions.map(q => q._id);
-  } catch (err) {
-    console.log('Error fetching all question IDs:', err);
-    return [];
+    // Retrieve the question from the database
+    const question = await Question.findById(questionId);
+
+    if (!question) {
+      console.log('No question found in database!');
+      res.status(404).send('No question found in database!');
+      return;
+    }
+
+    console.log('Question:', question);
+
+    console.log('User answer:', answer);
+
+    // Check if the answer is correct
+    const isCorrect = answer === question.answer;
+    console.log('Is answer correct?', isCorrect);
+
+    // Update performance tracking variables
+    questionsAnswered += 1;
+    correctAnswers += isCorrect ? 1 : 0;
+    incorrectAnswers += isCorrect ? 0 : 1;
+
+    const message = isCorrect ? 'Correct!' : 'Incorrect!';
+
+    // Return the message and performance data as JSON
+    res.json({
+      message,
+      performance: {
+        questionsAnswered,
+        correctAnswers,
+        incorrectAnswers,
+      },
+    });
+  } catch (error) {
+    console.log('Error retrieving question:', error);
+    res.status(500).send('Internal server error');
   }
-}
-
-
-module.exports = router;
-
-
-mongoose.connect('mongodb+srv://user:user@final-cluster0.waszbq8.mongodb.net/?retryWrites=true&w=majority', {
-}).then(() => {
-  console.log('Connected to database!');
-}).catch((err) => {
-  console.log('Error connecting to database:', err);
 });
 
+// Additional route to display performance
+router.get('/performance', (req, res) => {
+  res.render('performance', {
+    performance: {
+      questionsAnswered,
+      correctAnswers,
+      incorrectAnswers,
+    },
+  });
+});
+
+router.post('/performance', (req, res) => {
+  // Reset counters
+  questionsAnswered = 0;
+  correctAnswers = 0;
+  incorrectAnswers = 0;
+  
+  res.json({
+    performance: {
+      questionsAnswered,
+      correctAnswers,
+      incorrectAnswers,
+    },
+    message: 'Performance metrics reset successfully',
+  });
+});
+
+
+
+// Export the router
+module.exports = router;
