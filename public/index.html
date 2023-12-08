@@ -8,33 +8,39 @@
   </head>
 
   <body>
-    <header>
+    <!-- Header role for the top part of the page -->
+    <header role="banner">
       <h1>Test Review App</h1>
-      <img id="logo" src="/logo.jpg">
+      <!-- Role "img" and an aria-label for screen readers to describe the image -->
+      <img id="logo" src="/logo.jpg" role="img" aria-label="Test Review App Logo">
       <p>Your go-to platform for effective exam preparation</p>
-      <nav>
+      <!-- Navigation role for the navigation links -->
+      <nav role="navigation">
         <a href="/">Home</a>
         <a href="/question">Review</a>
         <a href="/performance">Performance</a>
       </nav>
     </header>
 
-    <main>
+    <!-- Main role for the primary content of the document -->
+    <main role="main">
       <div id="container">
         <h2>Welcome!</h2>
         <p>Test Review App is designed to help students review and practice multiple-choice questions for various subjects. Empower yourself with confidence as you navigate through a vast repository of curated questions, honing your knowledge and test-taking skills with our indispensable tool for achieving academic excellence.
         </p>
         <p>Features:</p>
-        <ul>
+        <!-- Role "list" for the list of features -->
+        <ul role="list">
           <li>Extensive question banks</li>
           <li>Interactive quizzes with instant feedback</li>
           <li>Performance analytics to track your progress (coming soon)</li>
           <li>Minimalistic, user-friendly interface</li>
         </ul>
-        <div id="button-container"><a href="/question" class="cta-button">Get Started</a></div>
+        <div id="button-container"><a href="/question" class="cta-button" role="button">Get Started</a></div>
       </div>
     </main>
 
-    <footer>&copy; 2023 Test Review App</footer>
+    <!-- Contentinfo role for the footer, containing metadata, copyright, etc. -->
+    <footer role="contentinfo">&copy; 2023 Test Review App</footer>
   </body>
 </html>
