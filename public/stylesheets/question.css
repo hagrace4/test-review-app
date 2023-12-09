@@ -28,7 +28,7 @@ body {
 }
 
 button {
-  background-color: #3498db;
+  background-color: dodgerblue;
   border: none;
   border-radius: 5px;
   color: white;
@@ -42,7 +42,7 @@ button:hover {
 }
 
 footer {
-  background-color: #3498db;
+  background-color: dodgerblue;
   bottom: 0;
   color: white;
   padding: 20px;
@@ -62,7 +62,7 @@ h1, h2 {
 }
 
 header {
-  background-color: #3498db;
+  background-color: dodgerblue;
   color: white;
   padding: 20px;
   text-align: center;
